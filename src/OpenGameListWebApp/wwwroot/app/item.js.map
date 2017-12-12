@@ -1,0 +1,1 @@
+{"version":3,"sources":["item.ts"],"names":["Item","Id","Title","Description","this"],"mappings":"oIAAAA,KAAA,WAEA,OADI,SAAmBC,GAAmBC,MAAsBC,aAAzCC,KAAAH,GAAAA,GAAmBG,KAAAF,MAAAA,MAAsBE,KAAAD,YAAAA,aADhE","file":"item.js","sourcesContent":["export class Item {\r\n    constructor(public Id: number, public Title: string, public Description: string){}\r\n}"]}
