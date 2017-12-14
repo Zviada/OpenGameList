@@ -33,7 +33,7 @@ export class ItemService {
 
         const url = this.baseUrl + id;
 	    return this.http.get(url)
-	        .map(res => <Item>res.json())
+	        .map(res => res.json())
 	        .catch(this.handleError);
     }
 
@@ -62,7 +62,7 @@ export class ItemService {
     private getItems(actionName: string, num?: number) {
         const url = this.baseUrl + actionName + '/' + (num != null ? num : '');
         return this.http.get(url)
-            .map(response => <Item>response.json())
+            .map(response => response.json())
             .catch(this.handleError);
     }
 
