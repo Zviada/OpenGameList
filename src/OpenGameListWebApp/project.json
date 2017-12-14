@@ -20,8 +20,8 @@
     "Microsoft.EntityFrameworkCore.SqlServer": "1.0.6",
     "Microsoft.EntityFrameworkCore.Design": "1.0.0-preview2-final",
     "Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore": "1.0.5",
-    "Microsoft.AspNetCore.Identity.EntityFrameworkCore": "1.0.5"
-
+    "Microsoft.AspNetCore.Identity.EntityFrameworkCore": "1.0.5",
+    "TinyMapper": "2.0.8"
   },
 
   "tools": {
