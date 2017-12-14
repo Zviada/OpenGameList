@@ -66,8 +66,8 @@ namespace OpenGameListWebApp.Controllers
                 item.CreatedDate = DateTime.Now;
                 item.LastModifiedDate = item.CreatedDate;
 
-                //TODO: replace the followint with the current user's id when authentication will be available
-                item.UserId = _dbContext.Users.SingleOrDefault(u => u.UserName == "Amdin")?.Id;
+                //TODO: replace the following with the current user's id when authentication will be available
+                item.UserId = _dbContext.Users.SingleOrDefault(u => u.UserName == "Admin")?.Id;
                 _dbContext.Items.Add(item);
                 _dbContext.SaveChanges();
                 return new JsonResult(TinyMapper.Map<ItemViewModel>(item), DefaultJsonSettings);
