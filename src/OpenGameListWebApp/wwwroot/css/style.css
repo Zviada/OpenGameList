@@ -136,3 +136,26 @@ item-list ul li .description {
   margin: 10px 0 20px 0;
   font-weight: bold;
 }
+.item-container form.item-detail-edit .empty-field {
+  color: #f04124;
+}
+.item-container form.item-detail-edit .form-group label {
+  font-size: 14px;
+  font-weight: bold;
+  display: block;
+  background-color: #eaeaea;
+  line-height: 1.4em;
+  padding: 5px 10px;
+}
+.item-container form.item-detail-edit .form-group textarea#input-description {
+  height: 80px;
+}
+.item-container form.item-detail-edit .form-group textarea#input-text {
+  height: 150px;
+}
+.item-container form.item-detail-edit .commands {
+  text-align: right;
+}
+.item-container form.item-detail-edit .commands input[type="button"] {
+  margin-left: 5px;
+}

@@ -156,4 +156,33 @@ item-list{
             font-weight: bold;
         }
     }
+    form.item-detail-edit {
+        .empty-field {
+            color: #f04124;
+        }
+        .form-group {
+            label {
+                font-size: 14px;
+                font-weight: bold;
+                display: block;
+                background-color: #eaeaea;
+                line-height: 1.4em;
+                padding: 5px 10px;
+            }
+            textarea {
+                &#input-description {
+                    height: 80px;
+                }
+                &#input-text {
+                    height: 150px;
+                }
+            }
+        }
+        .commands {
+            text-align: right;
+            input[type="button"] {
+                margin-left: 5px;
+            }
+        }
+    }
 }
