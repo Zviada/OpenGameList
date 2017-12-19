@@ -138,6 +138,8 @@ item-list ul li .description {
 }
 .item-container form.item-detail-edit .empty-field {
   color: #f04124;
+  font-weight: normal;
+  font-style: italic;
 }
 .item-container form.item-detail-edit .form-group label {
   font-size: 14px;
