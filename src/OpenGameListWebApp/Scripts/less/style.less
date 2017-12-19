@@ -114,3 +114,46 @@ item-list{
         }
     }
 }
+
+// Item Detail View & Edit components styling
+@color-panel: #f9f9f9;
+
+.item-container {
+    margin: 0 20px;
+    .nav.nav-tabs {
+        padding-right: 20px;
+        li {
+            &.active a {
+                font-weight: bold;
+                background-color: @color-panel;
+            }
+            float: right;
+        }
+    }
+    .panel.panel-default {
+        background-color: @color-panel;
+        border-top-width: 0;
+        .item-image-panel {
+            width: 170px;
+            min-height: 170px;
+            float: right;
+            padding: 10px;
+            background-color: #f2f2f2;
+            border: 1px solid #cccccc;
+            img {
+                width: 150px;
+                height: 150px;
+                border: 1px solid #e6e6e6;
+            }
+            .caption {
+                margin-top: 5px;
+                text-align: center;
+                font-size: 0.8em;
+            }
+        }
+        h3 {
+            margin: 10px 0 20px 0;
+            font-weight: bold;
+        }
+    }
+}
