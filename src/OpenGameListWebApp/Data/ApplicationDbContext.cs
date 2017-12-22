@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 using OpenGameListWebApp.Data.Comments;
 using OpenGameListWebApp.Data.Items;
@@ -6,7 +7,7 @@ using OpenGameListWebApp.Data.Users;
 
 namespace OpenGameListWebApp.Data
 {
-    public class ApplicationDbContext: DbContext
+    public class ApplicationDbContext: IdentityDbContext<ApplicationUser>
     {
         public ApplicationDbContext(DbContextOptions options): base(options)
         {
@@ -38,7 +39,7 @@ namespace OpenGameListWebApp.Data
 
         public DbSet<Comment> Comments { get; set; }
 
-        public DbSet<ApplicationUser> Users { get; set; }
+        //public DbSet<ApplicationUser> Users { get; set; }
 
         #endregion
     }

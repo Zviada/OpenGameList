@@ -1,20 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using OpenGameListWebApp.Data.Comments;
 using OpenGameListWebApp.Data.Items;
 
 namespace OpenGameListWebApp.Data.Users
 {
-    public class ApplicationUser
+    public class ApplicationUser: IdentityUser
     {
-        public ApplicationUser()
-        {
-        }
-
         #region Properties
 
-        [Key]
+        /*[Key]
         [Required]
         public string Id { get; set; }
 
@@ -23,7 +20,7 @@ namespace OpenGameListWebApp.Data.Users
         public string UserName { get; set; }
 
         [Required]
-        public string Email { get; set; }
+        public string Email { get; set; }*/
 
         public string DisplayName { get; set; }
 

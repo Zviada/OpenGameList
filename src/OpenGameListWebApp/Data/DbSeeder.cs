@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using OpenGameListWebApp.Data.Comments;
@@ -11,11 +13,15 @@ namespace OpenGameListWebApp.Data
 {
     public class DbSeeder
     {
-        private ApplicationDbContext _dbContext;
+        private readonly ApplicationDbContext _dbContext;
+        private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public DbSeeder(ApplicationDbContext dbContext)
+        public DbSeeder(ApplicationDbContext dbContext, RoleManager<IdentityRole> roleManager, UserManager<ApplicationUser> userManager)
         {
             _dbContext = dbContext;
+            _roleManager = roleManager;
+            _userManager = userManager;
         }
 
         public async Task SeedAsync()
@@ -26,7 +32,7 @@ namespace OpenGameListWebApp.Data
             //Create default users
             if (await _dbContext.Users.CountAsync() == 0)
             {
-                CreateUsers();
+                await CreateUsersAsync();
             }
 
             if (await _dbContext.Items.CountAsync() == 0)
@@ -35,53 +41,105 @@ namespace OpenGameListWebApp.Data
             }
         }
 
-        private void CreateUsers()
+        private async Task CreateUsersAsync()
         {
             DateTime createdDate = new DateTime(2017, 3, 1, 12, 30, 0);
             DateTime lastModifiedDate = DateTime.Now;
+            string roleAdministrator = "Administrators";
+            string roleRegistered = "Registered";
 
+            //Create Roles (if they doesn't exist yet)
+            if (!await _roleManager.RoleExistsAsync(roleAdministrator))
+            {
+                await _roleManager.CreateAsync(new IdentityRole(roleAdministrator));
+            }
+
+            if (!await _roleManager.RoleExistsAsync(roleRegistered))
+            {
+                await _roleManager.CreateAsync(new IdentityRole(roleRegistered));
+            }
+            
             //Creating "Admin" user
             var userAdmin = new ApplicationUser
                             {
-                                Id = Guid.NewGuid().ToString(),
                                 UserName = "Admin",
                                 Email = "admin@opengamelist.com",
                                 CreatedDate = createdDate,
                                 LastModifiedDate = lastModifiedDate
                             };
 
-            _dbContext.Users.Add(userAdmin);
+            // Insert "Admin" into the Databse and also assign the "Administrator" role to him
+            if (await _userManager.FindByIdAsync(userAdmin.Id) == null)
+            {
+                await _userManager.CreateAsync(userAdmin, "Pass4Admin");
+                await _userManager.AddToRoleAsync(userAdmin, roleAdministrator);
+
+                //Remove lockout and E-Mail confirmation.
+                userAdmin.EmailConfirmed = true;
+                userAdmin.LockoutEnabled = false;
+            }
 
 #if DEBUG
             // Create some sample users
-            _dbContext.Users.Add(new ApplicationUser
-                                 {
-                                     Id = Guid.NewGuid().ToString(),
-                                     UserName = "Ryan",
-                                     Email = "ryan@opengamelist.com",
-                                     CreatedDate = createdDate,
-                                     LastModifiedDate = lastModifiedDate
-                                 });
+            var ryanUser = new ApplicationUser
+                                  {
+                                      UserName = "Ryan",
+                                      Email = "ryan@opengamelist.com",
+                                      CreatedDate = createdDate,
+                                      LastModifiedDate = lastModifiedDate,
+                                      EmailConfirmed = true,
+                                      LockoutEnabled = false
+                                  };
 
-            _dbContext.Users.Add(new ApplicationUser
-                                 {
-                                     Id = Guid.NewGuid().ToString(),
-                                     UserName = "Solice",
-                                     Email = "solice@opengamelist.com",
-                                     CreatedDate = createdDate,
-                                     LastModifiedDate = lastModifiedDate
-                                 });
+            var soliceUser = new ApplicationUser
+                                  {
+                                      UserName = "Solice",
+                                      Email = "solice@opengamelist.com",
+                                      CreatedDate = createdDate,
+                                      LastModifiedDate = lastModifiedDate,
+                                      EmailConfirmed = true,
+                                      LockoutEnabled = false
+                                  };
 
-            _dbContext.Users.Add(new ApplicationUser
-                                 {
-                                     Id = Guid.NewGuid().ToString(),
-                                     UserName = "Vodan",
-                                     Email = "vodan@opengamelist.com",
-                                     CreatedDate = createdDate,
-                                     LastModifiedDate = lastModifiedDate
-                                 });
+            var vodanUser = new ApplicationUser
+                                  {
+                                      UserName = "Vodan",
+                                      Email = "vodan@opengamelist.com",
+                                      CreatedDate = createdDate,
+                                      LastModifiedDate = lastModifiedDate,
+                                      EmailConfirmed = true,
+                                      LockoutEnabled = false
+                                  };
+            
+            // Insert sample registered users into the Database and also assign the "Registered" role to him
+            if (await _userManager.FindByIdAsync(ryanUser.Id) == null)
+            {
+                await _userManager.CreateAsync(ryanUser, "Pass4Ryan");
+                await _userManager.AddToRoleAsync(ryanUser, roleRegistered);
+                //remove lockout and email confirmation
+                ryanUser.EmailConfirmed = true;
+                ryanUser.LockoutEnabled = false;
+            }
+
+            if (await _userManager.FindByIdAsync(soliceUser.Id) == null)
+            {
+                await _userManager.CreateAsync(soliceUser, "Pass4Solice");
+                await _userManager.AddToRoleAsync(soliceUser, roleRegistered);
+                //remove lockout and email confirmation
+                soliceUser.EmailConfirmed = true;
+                soliceUser.LockoutEnabled = false;
+            }
+
+            if (await _userManager.FindByIdAsync(vodanUser.Id) == null)
+            {
+                await _userManager.CreateAsync(vodanUser, "Pass4Vodan");
+                await _userManager.AddToRoleAsync(vodanUser, roleRegistered);
+                //remove lockout and email confirmation
+                vodanUser.EmailConfirmed = true;
+                vodanUser.LockoutEnabled = false;
+            }
 #endif
-            _dbContext.SaveChanges();
+            await _dbContext.SaveChangesAsync();
         }
 
         private void CreateItems()
