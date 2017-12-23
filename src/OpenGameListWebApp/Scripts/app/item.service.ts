@@ -1,5 +1,6 @@
 ﻿import { Injectable } from "@angular/core";
-import { Http, Response, Headers, RequestOptions } from '@angular/http';
+import { Response, Headers, RequestOptions } from '@angular/http';
+import { AuthHttp } from "./auth.http";
 import { Observable } from "rxjs/Observable";
 import { Item } from "./item";
 
@@ -8,7 +9,7 @@ export class ItemService {
 
     private baseUrl = 'api/items/'; //webapi URL
 
-    constructor(private http: Http) { }
+    constructor(private http: AuthHttp) { }
 
     //calls the [GET] /api/items/GetLatest/{n}
 	getLatest(num?: number) {
