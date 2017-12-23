@@ -1,6 +1,8 @@
 ﻿import { Component } from "@angular/core";
 import { FormBuilder, Validators, FormGroup } from "@angular/forms";
 import { Router } from "@angular/router";
+import { AuthService } from "./auth.service";
+
 
 @Component({
     selector: 'login',
@@ -24,8 +26,9 @@ import { Router } from "@angular/router";
 export class LoginComponent {
     title = 'Login';
     loginForm: FormGroup = null;
+    loginError = false;
 
-    constructor(private fb: FormBuilder) {
+    constructor(private fb: FormBuilder, private router: Router, private authService: AuthService) {
         this.loginForm = fb.group({
             username: ['', Validators.required],
             password: ['', Validators.required]
@@ -34,6 +37,21 @@ export class LoginComponent {
 
     performLogin(e) {
         e.preventDefault();
-        alert(JSON.stringify(this.loginForm.value));
+        let username = this.loginForm.value.username;
+        let password = this.loginForm.value.password;
+        this.authService.login(username, password)
+            .subscribe((data) => {
+                    //login successful
+                    this.loginError = false;
+                    var auth = this.authService.getAuth();
+                    alert('Our Token is: ' + auth.access_token);
+                    this.router.navigate(['']);
+                },
+                (err) => {
+                    console.log((err));
+                    //login failure
+                    this.loginError = true;
+                }
+            );
     }
 }
