@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Nelibur.ObjectMapper;
 using Newtonsoft.Json;
@@ -56,6 +58,7 @@ namespace OpenGameListWebApp.Controllers
         /// <param name="ivm"></param>
         /// <returns></returns>
         [HttpPost]
+        [Authorize]
         public IActionResult Add([FromBody] ItemViewModel ivm)
         {
             if (ivm != null)
@@ -66,8 +69,7 @@ namespace OpenGameListWebApp.Controllers
                 item.CreatedDate = DateTime.Now;
                 item.LastModifiedDate = item.CreatedDate;
 
-                //TODO: replace the following with the current user's id when authentication will be available
-                item.UserId = _dbContext.Users.SingleOrDefault(u => u.UserName == "Admin")?.Id;
+                item.UserId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
                 _dbContext.Items.Add(item);
                 _dbContext.SaveChanges();
                 return new JsonResult(TinyMapper.Map<ItemViewModel>(item), DefaultJsonSettings);
@@ -83,6 +85,7 @@ namespace OpenGameListWebApp.Controllers
         /// <param name="ivm"></param>
         /// <returns></returns>
         [HttpPut("{id}")]
+        [Authorize]
         public IActionResult Update(int id, [FromBody] ItemViewModel ivm)
         {
             if (ivm != null)
@@ -115,6 +118,7 @@ namespace OpenGameListWebApp.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpDelete("{id}")]
+        [Authorize]
         public IActionResult Delete(int id)
         {
             var item = _dbContext.Items.SingleOrDefault(i => i.Id == id);
