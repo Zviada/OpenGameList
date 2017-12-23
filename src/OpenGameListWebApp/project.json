@@ -21,7 +21,9 @@
     "Microsoft.EntityFrameworkCore.Design": "1.0.0-preview2-final",
     "Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore": "1.0.5",
     "Microsoft.AspNetCore.Identity.EntityFrameworkCore": "1.0.5",
-    "TinyMapper": "2.0.8"
+    "TinyMapper": "2.0.8",
+    "Microsoft.IdentityModel.Tokens": "5.1.5",
+    "System.IdentityModel.Tokens.Jwt": "5.1.5"
   },
 
   "tools": {
