@@ -57,6 +57,9 @@ namespace OpenGameListWebApp
             services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(Configuration["Data:DefaultConnection:ConnectionString"]));
 
             services.AddSingleton<DbSeeder>();
+
+            //Add a reference to the Configuration object for DI
+            services.AddSingleton<IConfiguration>(c => Configuration);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

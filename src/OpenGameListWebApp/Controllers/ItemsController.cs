@@ -4,23 +4,21 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Nelibur.ObjectMapper;
 using Newtonsoft.Json;
 using OpenGameListWebApp.Data;
 using OpenGameListWebApp.Data.Items;
+using OpenGameListWebApp.Data.Users;
 using OpenGameListWebApp.ViewModels;
 
 namespace OpenGameListWebApp.Controllers
 {
-    [Route("api/[controller]")]
-    public class ItemsController : Controller
+    public class ItemsController : BaseController
     {
-        private ApplicationDbContext _dbContext;
-
-        public ItemsController(ApplicationDbContext dbContext)
+        public ItemsController(ApplicationDbContext dbContext, SignInManager<ApplicationUser> signInManager, UserManager<ApplicationUser> userManager): base(dbContext, signInManager, userManager)
         {
-            _dbContext = dbContext;
         }
 
         #region RESTful methods
@@ -43,7 +41,7 @@ namespace OpenGameListWebApp.Controllers
         [HttpGet("{id}")]
         public IActionResult Get(int id)
         {
-            var item = _dbContext.Items.FirstOrDefault(i => i.Id == id);
+            var item = DbContext.Items.FirstOrDefault(i => i.Id == id);
             if (item != null)
             {
                 return new JsonResult(TinyMapper.Map<ItemViewModel>(item), DefaultJsonSettings);
@@ -69,9 +67,9 @@ namespace OpenGameListWebApp.Controllers
                 item.CreatedDate = DateTime.Now;
                 item.LastModifiedDate = item.CreatedDate;
 
-                item.UserId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
-                _dbContext.Items.Add(item);
-                _dbContext.SaveChanges();
+                item.UserId = GetCurrentUserId();
+                DbContext.Items.Add(item);
+                DbContext.SaveChanges();
                 return new JsonResult(TinyMapper.Map<ItemViewModel>(item), DefaultJsonSettings);
             }
 
@@ -90,7 +88,7 @@ namespace OpenGameListWebApp.Controllers
         {
             if (ivm != null)
             {
-                var item = _dbContext.Items.SingleOrDefault(i => i.Id == id);
+                var item = DbContext.Items.SingleOrDefault(i => i.Id == id);
                 if (item != null)
                 {
                     //update Item
@@ -104,7 +102,7 @@ namespace OpenGameListWebApp.Controllers
                     //server side properties
                     item.LastModifiedDate = DateTime.Now;
 
-                    _dbContext.SaveChanges();
+                    DbContext.SaveChanges();
                     return new JsonResult(TinyMapper.Map<ItemViewModel>(item), DefaultJsonSettings);
                 }
             }
@@ -121,11 +119,11 @@ namespace OpenGameListWebApp.Controllers
         [Authorize]
         public IActionResult Delete(int id)
         {
-            var item = _dbContext.Items.SingleOrDefault(i => i.Id == id);
+            var item = DbContext.Items.SingleOrDefault(i => i.Id == id);
             if (item != null)
             {
-                _dbContext.Items.Remove(item);
-                _dbContext.SaveChanges();
+                DbContext.Items.Remove(item);
+                DbContext.SaveChanges();
                 return new OkResult();
             }
 
@@ -154,7 +152,7 @@ namespace OpenGameListWebApp.Controllers
         public IActionResult GetLatest(int n)
         {
             n = n > MaxNumberOfItems ? MaxNumberOfItems : n;
-            var items = _dbContext.Items.OrderByDescending(item => item.CreatedDate).Take(n).ToArray();
+            var items = DbContext.Items.OrderByDescending(item => item.CreatedDate).Take(n).ToArray();
             return new JsonResult(ToItemViewModelList(items), DefaultJsonSettings);
         }
 
@@ -177,7 +175,7 @@ namespace OpenGameListWebApp.Controllers
         public IActionResult GetMostViewed(int n)
         {
             n = n > MaxNumberOfItems ? MaxNumberOfItems : n;
-            var items = _dbContext.Items.OrderByDescending(item => item.ViewCount).Take(n).ToArray();
+            var items = DbContext.Items.OrderByDescending(item => item.ViewCount).Take(n).ToArray();
             return new JsonResult(ToItemViewModelList(items), DefaultJsonSettings);
         }
 
@@ -200,7 +198,7 @@ namespace OpenGameListWebApp.Controllers
         public IActionResult GetRandom(int n)
         {
             n = n > MaxNumberOfItems ? MaxNumberOfItems : n;
-            var items = _dbContext.Items.OrderBy(item => Guid.NewGuid()).Take(n).ToArray();
+            var items = DbContext.Items.OrderBy(item => Guid.NewGuid()).Take(n).ToArray();
             return new JsonResult(ToItemViewModelList(items), DefaultJsonSettings);
         }
 
@@ -216,8 +214,6 @@ namespace OpenGameListWebApp.Controllers
 
             return list;
         }
-
-        private JsonSerializerSettings DefaultJsonSettings => new JsonSerializerSettings {Formatting = Formatting.Indented};
 
         private int DefaultNumberOfItems => 5;
 

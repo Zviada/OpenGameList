@@ -7,14 +7,6 @@ namespace OpenGameListWebApp.ViewModels
     [JsonObject(MemberSerialization.OptOut)]
     public class ItemViewModel
     {
-        #region Constructor
-
-        public ItemViewModel()
-        {
-        }
-
-        #endregion
-
         #region Properties
 
         public int Id { get; set; }
