@@ -202,3 +202,31 @@ item-list{
         }
     }
 }
+
+.user-container {
+    max-width: 500px;
+    padding: 15px;
+    .form-user {
+        margin-left: 20px;
+        input {
+            margin-bottom: 10px;
+            margin-right: 5px;
+            max-width: 330px;
+            display: inline;
+        }
+        .validator-label {
+            &.valid {
+                color: green;
+            }
+            &.invalid {
+                color: red;
+            }
+        }
+    }    
+}
+
+.register-link {
+    cursor: pointer;
+    font-size: 0.8em;
+    margin: 10px 0;
+}

@@ -53,6 +53,12 @@ namespace OpenGameListWebApp.Controllers
             return BadRequest(new { error = "Not implemented yet." });
         }
 
+        /// <summary>
+        /// POST: api/accounts
+        /// </summary>
+        /// <param name="userViewModel"></param>
+        /// <returns></returns>
+        [HttpPost]
         public async Task<IActionResult> Add([FromBody] UserViewModel userViewModel)
         {
             //return a generic HTTP Status 500 (Not Found) if the client payload is invalid
@@ -80,7 +86,7 @@ namespace OpenGameListWebApp.Controllers
                            LastModifiedDate = now
                        };
 
-                //Add the user to the Db with a random password
+                //Add the user to the Db with a password
                 await UserManager.CreateAsync(user, userViewModel.Password);
 
                 //Assign the user to the 'Registered' role
