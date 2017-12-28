@@ -156,7 +156,7 @@ namespace OpenGameListWebApp.Controllers
 
                 if (!String.IsNullOrEmpty(userViewModel.PasswordNew))
                 {
-                    await UserManager.ChangePasswordAsync(user, userViewModel.Password, userViewModel.PasswordNew);
+                    IdentityResult identityResult = await UserManager.ChangePasswordAsync(user, userViewModel.Password, userViewModel.PasswordNew);
                     hadChanges = true;
                 }
 

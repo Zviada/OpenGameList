@@ -39,6 +39,10 @@ const appRoutes: Routes = [
         component: UserEditComponent
     },
     {
+        path: 'account',
+        component: UserEditComponent
+    },
+    {
         path: '**',
         component: PageNotFoundComponent
     }

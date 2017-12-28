@@ -198,3 +198,11 @@ item-list ul li .description {
   font-size: 0.8em;
   margin: 10px 0;
 }
+@media (min-width: 768px) {
+  .nav.navbar-nav {
+    float: none;
+  }
+  .nav.navbar-nav li.right {
+    float: right;
+  }
+}
